@@ -1,11 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Can You Survive ZSGS?</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            background: linear-gradient(to right,#141e30,#243b55);
+            color:white;
+            text-align:center;
+            padding-top:40px;
+        }
+
+        .box{
+            width:400px;
+            margin:auto;
+            background:white;
+            color:black;
+            padding:25px;
+            border-radius:15px;
+        }
+
+        input{
+            width:90%;
+            padding:10px;
+            margin:10px;
+            border-radius:8px;
+            border:1px solid gray;
+        }
+
+        button{
+            padding:12px 25px;
+            background:#243b55;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#141e30;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+
+    <script>
+        let currentQuestion = 0;
+
+        function showQuestion(index) {
+            const questions = document.querySelectorAll('.question');
+            questions.forEach((q, i) => {
+                q.classList.toggle('hidden', i !== index);
+            });
+        }
+
+        function nextQuestion() {
+            const questions = document.querySelectorAll('.question');
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showQuestion(currentQuestion);
+        });
+    </script>
 </head>
 <body>
-    Hello from Uma 
+    <h1> Can You Survive ZSGS? </h1>
+
+    <div class="box">
+        <form action="/survival" method="post">
+
+            <div class="question">
+                <input type="number" name="coffee" placeholder="Cups of Tea/Coffee per day" required>
+            </div>
+
+            <div class="question hidden">
+                <input type="number" name="sleep" placeholder="Sleep hours" required>
+            </div>
+
+            <div class="question hidden">
+                <input type="number" name="backlog" placeholder="Assignment backlog count" required>
+            </div>
+
+            <div class="question hidden">
+                <input type="number" name="leetcode" placeholder="LeetCode problems solved" required>
+            </div>
+
+            <div class="question hidden">
+                <input type="number" name="assessment" placeholder="Problems solved in last assessment" required>
+            </div>
+
+            <div>
+                <button type="button" onclick="prevQuestion()">Previous</button>
+                <button type="button" onclick="nextQuestion()">Next</button>
+                <button type="submit" class="hidden" id="submitButton">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const questions = document.querySelectorAll('.question');
+            const submitButton = document.getElementById('submitButton');
+
+            function updateButtons() {
+                const prevButton = document.querySelector('button[onclick="prevQuestion()"]');
+                const nextButton = document.querySelector('button[onclick="nextQuestion()"]');
+
+                prevButton.disabled = currentQuestion === 0;
+                nextButton.classList.toggle('hidden', currentQuestion === questions.length - 1);
+                submitButton.classList.toggle('hidden', currentQuestion !== questions.length - 1);
+            }
+
+            document.querySelector('button[onclick="nextQuestion()"]').addEventListener('click', updateButtons);
+            document.querySelector('button[onclick="prevQuestion()"]').addEventListener('click', updateButtons);
+
+            updateButtons();
+        });
+    </script>
 </body>
 </html>
